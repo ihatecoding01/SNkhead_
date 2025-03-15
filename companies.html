@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies - SneakerHead</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Locomotive Scroll -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/locomotive-scroll/4.1.4/locomotive-scroll.min.js"></script>
+    <style>
+        .custom-cursor {
+            background-color: white;
+            mix-blend-mode: difference;
+            opacity: 0.7;
+        }
+        
+        .bg-gradient-sneaker {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        }
+        
+        .company-header-overlay {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), url('sneaker-brands-bg.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Glow effect */
+        .glow-on-hover {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .glow-on-hover::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #5f3dc4, #7048e8, #6366f1, #4f46e5);
+            filter: blur(20px);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glow-on-hover:hover::after {
+            opacity: 0.7;
+        }
+        
+        /* 3D card effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        /* Smooth scrolling */
+        html.has-scroll-smooth {
+            overflow: hidden;
+        }
+        
+        .has-scroll-smooth body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="font-sans bg-slate-950 text-white transition-colors duration-300" data-scroll-container>
+    <!-- Navbar -->
+    <nav id="navbar" class="bg-black bg-opacity-75 backdrop-blur-md shadow-xl fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <span class="text-3xl font-bold text-white tracking-tight">SneakerHead</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Home</a>
+                    <a href="companies.html" class="text-indigo-400 font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Companies</a>
+                    <a href="top_sneakers.html" class="text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Top Sneakers</a>
+                    <a href="about_us.html" class="text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">About Us</a>
+                    <a href="feedback.html" class="text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Feedback</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center">
+                    <button id="mobileMenuButton" class="md:hidden text-white hover:text-indigo-400 transition-colors">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4 transition-all duration-300 ease-in-out">
+                <a href="index.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Home</a>
+                <a href="companies.html" class="block py-2 px-4 text-indigo-400 bg-indigo-900 bg-opacity-50 rounded transition-colors">Companies</a>
+                <a href="top_sneakers.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Top Sneakers</a>
+                <a href="about_us.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">About Us</a>
+                <a href="feedback.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Feedback</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="relative h-64 md:h-80 flex items-center justify-center overflow-hidden mb-16" data-scroll-section>
+        <div class="company-header-overlay absolute inset-0 z-0"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-header">Top Sneaker Brands</h1>
+            <p class="text-lg md:text-xl text-white max-w-2xl mx-auto animate-header-subtitle">Explore the world's most iconic footwear companies and their legendary sneaker collections</p>
+        </div>
+    </header>
+
+    <!-- Company Selection Section -->
+    <main class="py-8 md:py-16 container mx-auto px-4" data-scroll-section>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- Nike -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/Nike.jpeg" alt="Nike" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Nike</h4>
+                            <p class="text-gray-300 text-sm">Just Do It</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">Founded in 1964, Nike has revolutionized athletic footwear with iconic designs like Air Jordan, Air Max, and Air Force 1.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">40+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Adidas -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/adidas.jpg" id="adidas" alt="Adidas" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Adidas</h4>
+                            <p class="text-gray-300 text-sm">Impossible Is Nothing</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">A German multinational known for the Superstar, Stan Smith, and revolutionary Boost technology in the Ultraboost line.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">35+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Puma -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/puma.jpg" alt="Puma" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Puma</h4>
+                            <p class="text-gray-300 text-sm">Forever Faster</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">Founded in 1948, Puma offers classic styles like the Suede and modern innovations in sport-lifestyle footwear.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">25+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- New Balance -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/NB.jpg" alt="New Balance" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">New Balance</h4>
+                            <p class="text-gray-300 text-sm">Fearlessly Independent</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">An American sports footwear company known for its numeric naming system and commitment to domestic manufacturing.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">20+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Air Jordan -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/jordan.jpg" alt="Air Jordan" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Air Jordan</h4>
+                            <p class="text-gray-300 text-sm">Become Legendary</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">The iconic Jordan Brand, created in collaboration with Michael Jordan, offers premium basketball shoes and athletic apparel.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">30+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Converse -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/converse.jpg" alt="Converse" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Converse</h4>
+                            <p class="text-gray-300 text-sm">All Stars</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">An American shoe company known for its iconic Chuck Taylor All Stars, which has become a cultural staple worldwide.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">15+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Reebok -->
+            <div class="company-card bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-500 hover:shadow-indigo-500/20 hover:shadow-xl transform hover:scale-105 animate-on-scroll card-3d glow-on-hover">
+                <a href="top-shoes.html" class="block">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="images/reebok.jpg" alt="Reebok" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 w-full">
+                            <h4 class="text-2xl font-bold text-white mb-2">Reebok</h4>
+                            <p class="text-gray-300 text-sm">Sport the Unexpected</p>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-slate-800">
+                        <p class="text-gray-300 mb-4">With heritage in fitness, Reebok produces and distributes fitness, running and CrossFit sportswear including footwear.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">18+ Collections</span>
+                            <span class="inline-flex items-center text-indigo-400 group">
+                                <span class="mr-2">Explore</span>
+                                <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Brand History Section -->
+    <section class="py-16 bg-slate-950" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white animate-on-scroll">Evolution of Sneaker Culture</h2>
+            <div class="bg-slate-900 rounded-xl p-8">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="w-full lg:w-1/2 animate-on-scroll">
+                        <h3 class="text-2xl font-bold mb-4 text-white">From Athletes to Cultural Icons</h3>
+                        <p class="text-gray-300 mb-4">
+                            Sneakers have transcended their athletic origins to become symbols of fashion, status, and personal expression. What began as simple rubber-soled athletic footwear has evolved into a global industry worth billions, with collectors and enthusiasts driving a thriving market for limited editions and collaborations.
+                        </p>
+                        <p class="text-gray-300 mb-4">
+                            From Chuck Taylor's basketball shoes to Air Jordan's revolution and the rise of modern streetwear, each brand has contributed unique chapters to sneaker history. Today's most coveted designs represent decades of innovation, cultural movement, and artistic expression.
+                        </p>
+                        <a href="#" class="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300">
+                            Learn More About Sneaker History
+                        </a>
+                    </div>
+                    <div class="w-full lg:w-1/2 animate-on-scroll">
+                        <div class="relative h-full min-h-64 bg-slate-800 rounded-lg overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-full max-w-md p-6">
+                                    <div class="timeline space-y-8">
+                                        <div class="flex">
+                                            <div class="flex flex-col items-center mr-4">
+                                                <div class="rounded-full h-8 w-8 bg-indigo-600 flex items-center justify-center">
+                                                    <span class="text-white text-sm font-bold">1</span>
+                                                </div>
+                                                <div class="h-full w-0.5 bg-indigo-600"></div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">1917 - Converse All Star</h4>
+                                                <p class="text-gray-400">The first basketball shoe is introduced, later becoming the iconic Chuck Taylor All Star.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex">
+                                            <div class="flex flex-col items-center mr-4">
+                                                <div class="rounded-full h-8 w-8 bg-indigo-600 flex items-center justify-center">
+                                                    <span class="text-white text-sm font-bold">2</span>
+                                                </div>
+                                                <div class="h-full w-0.5 bg-indigo-600"></div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">1984 - Air Jordan</h4>
+                                                <p class="text-gray-400">Nike partners with rookie Michael Jordan, creating a brand that revolutionized sneaker culture.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex">
+                                            <div class="flex flex-col items-center mr-4">
+                                                <div class="rounded-full h-8 w-8 bg-indigo-600 flex items-center justify-center">
+                                                    <span class="text-white text-sm font-bold">3</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">2015 - Modern Era</h4>
+                                                <p class="text-gray-400">Technology, limited releases, and collaborations with artists define contemporary sneaker culture.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Collections -->
+    <section class="py-16 bg-gradient-to-r from-indigo-900 to-purple-900" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white animate-on-scroll">Popular Collections</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl animate-on-scroll">
+                    <div class="relative h-48">
+                        <img src="images/nikearimaxcollection.jpg" alt="Nike Air Max" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-4">
+                            <h3 class="text-xl font-bold text-white">Nike Air Max Collection</h3>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-300 text-sm mb-3">The revolutionary Air Max line, known for visible air cushioning technology since 1987.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold">20+ Models</span>
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">View Collection</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl animate-on-scroll">
+                    <div class="relative h-48">
+                        <img src="images/jordan.jpg" alt="Air Jordan Retro" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-4">
+                            <h3 class="text-xl font-bold text-white">Air Jordan Retro Series</h3>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-300 text-sm mb-3">Iconic basketball shoes worn by Michael Jordan throughout his legendary career.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold">35+ Models</span>
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">View Collection</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl animate-on-scroll">
+                    <div class="relative h-48">
+                        <img src="images/adidasboost.jpg" alt="Adidas Boost" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-4">
+                            <h3 class="text-xl font-bold text-white">Adidas Boost Technology</h3>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-300 text-sm mb-3">Revolutionary cushioning technology that changed the running and lifestyle shoe market.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold">15+ Models</span>
+                            <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium">View Collection</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="top_sneakers.html" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Explore All Collections
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-slate-950" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <div class="bg-slate-900 rounded-xl shadow-2xl p-8 md:p-12 animate-on-scroll">
+                <div class="flex flex-col lg:flex-row items-center">
+                    <div class="w-full lg:w-2/3 mb-8 lg:mb-0 lg:pr-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">Stay Connected With SneakerHead</h2>
+                        <p class="text-gray-300 mb-4">Subscribe to our newsletter for exclusive drops, brand releases, and collector insights delivered straight to your inbox.</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 whitespace-nowrap">
+                                                            Subscribe Now
+                                                        </button>
+                                                    </div>
+                                                    <p class="text-gray-400 text-sm mt-3">By subscribing, you agree to our Privacy Policy and consent to receive updates from us.</p>
+                                                </div>
+                                                <div class="w-full lg:w-1/3">
+                                                    <div class="bg-slate-800 p-6 rounded-lg text-center">
+                                                        <div class="mb-4">
+                                                            <i class="fas fa-bell text-4xl text-indigo-400"></i>
+                                                        </div>
+                                                        <h3 class="text-xl font-bold text-white mb-2">Get Notified First</h3>
+                                                        <p class="text-gray-300 text-sm">Early access to limited releases and exclusive member discounts.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            
+                                <!-- Brand Rankings Section -->
+                                <section class="py-16 bg-slate-900" data-scroll-section>
+                                    <div class="container mx-auto px-4">
+                                        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white animate-on-scroll">Brand Rankings & Market Share</h2>
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                            <div class="bg-slate-800 rounded-lg p-6 animate-on-scroll">
+                                                <h3 class="text-xl font-bold text-white mb-4">Global Market Leaders (2024)</h3>
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <div class="flex justify-between mb-1">
+                                                            <span class="text-white font-medium">Nike</span>
+                                                            <span class="text-indigo-400">38%</span>
+                                                        </div>
+                                                        <div class="w-full bg-slate-700 rounded-full h-2">
+                                                            <div class="bg-indigo-500 h-2 rounded-full" style="width: 38%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex justify-between mb-1">
+                                                            <span class="text-white font-medium">Adidas</span>
+                                                            <span class="text-indigo-400">28%</span>
+                                                        </div>
+                                                        <div class="w-full bg-slate-700 rounded-full h-2">
+                                                            <div class="bg-indigo-500 h-2 rounded-full" style="width: 28%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex justify-between mb-1">
+                                                            <span class="text-white font-medium">Jordan Brand</span>
+                                                            <span class="text-indigo-400">12%</span>
+                                                        </div>
+                                                        <div class="w-full bg-slate-700 rounded-full h-2">
+                                                            <div class="bg-indigo-500 h-2 rounded-full" style="width: 12%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex justify-between mb-1">
+                                                            <span class="text-white font-medium">New Balance</span>
+                                                            <span class="text-indigo-400">8%</span>
+                                                        </div>
+                                                        <div class="w-full bg-slate-700 rounded-full h-2">
+                                                            <div class="bg-indigo-500 h-2 rounded-full" style="width: 8%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex justify-between mb-1">
+                                                            <span class="text-white font-medium">Others</span>
+                                                            <span class="text-indigo-400">14%</span>
+                                                        </div>
+                                                        <div class="w-full bg-slate-700 rounded-full h-2">
+                                                            <div class="bg-indigo-500 h-2 rounded-full" style="width: 14%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bg-slate-800 rounded-lg p-6 animate-on-scroll">
+                                                <h3 class="text-xl font-bold text-white mb-4">Trending Brands This Season</h3>
+                                                <div class="space-y-6">
+                                                    <div class="flex items-center">
+                                                        <div class="w-12 h-12 bg-indigo-900 rounded-full flex items-center justify-center text-white font-bold mr-4">1</div>
+                                                        <div>
+                                                            <h4 class="text-white font-medium">Nike Dunk Series</h4>
+                                                            <p class="text-gray-400 text-sm">Resurging popularity with new colorways and collaborations</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-12 h-12 bg-indigo-800 rounded-full flex items-center justify-center text-white font-bold mr-4">2</div>
+                                                        <div>
+                                                            <h4 class="text-white font-medium">New Balance 990 Series</h4>
+                                                            <p class="text-gray-400 text-sm">Growing streetwear appeal among fashion enthusiasts</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-12 h-12 bg-indigo-700 rounded-full flex items-center justify-center text-white font-bold mr-4">3</div>
+                                                        <div>
+                                                            <h4 class="text-white font-medium">Adidas Forum</h4>
+                                                            <p class="text-gray-400 text-sm">Classic basketball silhouette making a strong comeback</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold mr-4">4</div>
+                                                        <div>
+                                                            <h4 class="text-white font-medium">Air Jordan 4</h4>
+                                                            <p class="text-gray-400 text-sm">Leading retro releases with high-demand collaborations</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            
+                                <!-- Latest Brand News -->
+                                <section class="py-16 bg-slate-950" data-scroll-section>
+                                    <div class="container mx-auto px-4">
+                                        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white animate-on-scroll">Latest Brand News</h2>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                            <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg animate-on-scroll">
+                                                <div class="relative h-48">
+                                                    <img src="images/nikesus.jpg" alt="Nike Sustainability" class="w-full h-full object-cover">
+                                                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 m-2 rounded">NEWS</div>
+                                                </div>
+                                                <div class="p-6">
+                                                    <h3 class="text-xl font-bold text-white mb-2">Nike Commits to Full Sustainability by 2030</h3>
+                                                    <p class="text-gray-300 text-sm mb-4">The sportswear giant announces plans to use 100% recycled materials in all sneaker production.</p>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-gray-400 text-sm">March 1, 2025</span>
+                                                        <a href="#" class="text-indigo-400 hover:text-indigo-300">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg animate-on-scroll">
+                                                <div class="relative h-48">
+                                                    <img src="images/adidasboost.jpg" alt="Adidas Partnership" class="w-full h-full object-cover">
+                                                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 m-2 rounded">PARTNERSHIP</div>
+                                                </div>
+                                                <div class="p-6">
+                                                    <h3 class="text-xl font-bold text-white mb-2">Adidas Announces Major Tech Partnership</h3>
+                                                    <p class="text-gray-300 text-sm mb-4">New smart sneaker line with integrated fitness tracking to launch next quarter.</p>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-gray-400 text-sm">February 15, 2025</span>
+                                                        <a href="#" class="text-indigo-400 hover:text-indigo-300">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg animate-on-scroll">
+                                                <div class="relative h-48">
+                                                    <img src="images/jordan.jpg" alt="Jordan Brand" class="w-full h-full object-cover">
+                                                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 m-2 rounded">RELEASE</div>
+                                                </div>
+                                                <div class="p-6">
+                                                    <h3 class="text-xl font-bold text-white mb-2">Jordan Brand Teases 40th Anniversary Collection</h3>
+                                                    <p class="text-gray-300 text-sm mb-4">Limited-edition models celebrating four decades of the iconic Air Jordan series.</p>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-gray-400 text-sm">March 12, 2025</span>
+                                                        <a href="#" class="text-indigo-400 hover:text-indigo-300">Read More</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mt-12">
+                                            <a href="#" class="inline-block border-2 border-indigo-500 text-indigo-400 px-6 py-3 rounded-lg hover:bg-indigo-500 hover:text-white transition-all duration-300">
+                                                View All News
+                                            </a>
+                                        </div>
+                                    </div>
+                                </section>
+                            
+                                <footer class="bg-black py-12" data-scroll-section>
+                                    <div class="container mx-auto px-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                                            <div>
+                                                <h3 class="text-2xl font-bold text-white mb-4">SneakerHead</h3>
+                                                <p class="text-gray-400">Your ultimate destination for premium sneakers and streetwear culture.</p>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="text-xl font-bold text-white mb-4">Quick Links</h4>
+                                                <ul class="space-y-2">
+                                                    <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                                                    <li><a href="companies.html" class="text-gray-400 hover:text-white transition-colors">Companies</a></li>
+                                                    <li><a href="top_sneakers.html" class="text-gray-400 hover:text-white transition-colors">Top Sneakers</a></li>
+                                                    <li><a href="about_us.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                                                    <li><a href="feedback.html" class="text-gray-400 hover:text-white transition-colors">Feedback</a></li>
+                                                </ul>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="text-xl font-bold text-white mb-4">Contact Us</h4>
+                                                <ul class="space-y-2">
+                                                    <li class="flex items-center text-gray-400"><i class="fas fa-map-marker-alt mr-2"></i> 123 Sneaker St, Fashion District</li>
+                                                    <li class="flex items-center text-gray-400"><i class="fas fa-phone mr-2"></i> +1 (555) 123-4567</li>
+                                                    <li class="flex items-center text-gray-400"><i class="fas fa-envelope mr-2"></i> info@sneakerhead.com</li>
+                                                </ul>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
+                                                <div class="flex space-x-4">
+                                                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-instagram"></i></a>
+                                                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-twitter"></i></a>
+                                                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-facebook"></i></a>
+                                                    <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-youtube"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="border-t border-gray-800 pt-8 mt-8">
+                                            <div class="flex flex-col-reverse md:flex-row justify-between items-center">
+                                                <p class="text-gray-500 text-sm mt-4 md:mt-0">&copy; 2025 SneakerHead. All rights reserved.</p>
+                                                <div class="flex space-x-4">
+                                                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                                                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Terms of Service</a>
+                                                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Shipping Info</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </footer>
+</body>
+</html>

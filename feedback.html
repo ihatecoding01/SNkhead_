@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - SneakerHead</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Locomotive Scroll -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/locomotive-scroll/4.1.4/locomotive-scroll.min.js"></script>
+    <style>
+        .custom-cursor {
+            background-color: white;
+            mix-blend-mode: difference;
+            opacity: 0.7;
+        }
+        
+        .bg-gradient-sneaker {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        }
+        
+        .feedback-hero-overlay {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), url('feedback-hero.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* Smooth scrolling */
+        html.has-scroll-smooth {
+            overflow: hidden;
+        }
+        
+        .has-scroll-smooth body {
+            overflow: hidden;
+        }
+        
+        /* Progress bar animation */
+        .progress-bar {
+            height: 4px;
+            width: 0;
+            background: linear-gradient(to right, #3b82f6, #6366f1);
+            transition: width 1.5s ease;
+        }
+        
+        /* Form input focus effects */
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="font-sans bg-slate-950 text-white transition-colors duration-300" data-scroll-container>
+    <!-- Navbar -->
+    <nav id="navbar" class="bg-black bg-opacity-75 backdrop-blur-md shadow-xl fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <span class="text-3xl font-bold text-white tracking-tight">SneakerHead</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Home</a>
+                    <a href="companies.html" class="nav-link text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Companies</a>
+                    <a href="top_sneakers.html" class="nav-link text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Top Sneakers</a>
+                    <a href="about_us.html" class="nav-link text-white hover:text-indigo-400 hover:font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-indigo-500 after:transition-all after:duration-300">About Us</a>
+                    <a href="feedback.html" class="active-nav-link text-indigo-400 font-bold transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-indigo-500 after:transition-all after:duration-300">Feedback</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center">
+                    <button id="mobileMenuButton" class="md:hidden text-white hover:text-indigo-400 transition-colors">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4 transition-all duration-300 ease-in-out">
+                <a href="index.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Home</a>
+                <a href="companies.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Companies</a>
+                <a href="top_sneakers.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">Top Sneakers</a>
+                <a href="about_us.html" class="block py-2 px-4 text-white hover:bg-indigo-900 rounded transition-colors">About Us</a>
+                <a href="feedback.html" class="block py-2 px-4 bg-indigo-900 text-white rounded transition-colors">Feedback</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="relative h-96 flex items-center justify-center overflow-hidden" data-scroll-section>
+        <div class="feedback-hero-overlay absolute inset-0 z-10"></div>
+        <div class="container mx-auto px-4 text-center relative z-20">
+            <h1 class="hero-title text-5xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">Your <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">Feedback</span></h1>
+            <p class="hero-subtitle text-xl md:text-2xl text-white my-6 max-w-2xl mx-auto">Help us improve and shape the future of SneakerHead</p>
+            
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-indicator">
+                <i class="fas fa-chevron-down text-white text-2xl opacity-80"></i>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Feedback Form Section -->
+    <section class="py-16 bg-slate-900" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-12 animate-on-scroll">
+                    <h2 class="text-3xl font-bold mb-6 text-white">Share Your <span class="text-indigo-400">Thoughts</span></h2>
+                    <p class="text-gray-300 text-lg">We value your feedback! Please take a moment to share your thoughts, suggestions, or experiences with us. Your input helps us improve and deliver a better experience for the sneaker community.</p>
+                </div>
+                
+                <div class="bg-slate-800 p-8 rounded-xl shadow-lg animate-on-scroll">
+                    <form>
+                        <div class="mb-6">
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Your Name</label>
+                            <input type="text" id="name" class="form-input bg-slate-700 border border-slate-600 rounded-lg block w-full p-3 text-white focus:ring-indigo-500 focus:border-indigo-500 transition-colors" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="email" class="block mb-2 text-sm font-medium text-gray-300">Your Email</label>
+                            <input type="email" id="email" class="form-input bg-slate-700 border border-slate-600 rounded-lg block w-full p-3 text-white focus:ring-indigo-500 focus:border-indigo-500 transition-colors" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="category" class="block mb-2 text-sm font-medium text-gray-300">Feedback Category</label>
+                            <select id="category" class="form-input bg-slate-700 border border-slate-600 rounded-lg block w-full p-3 text-white focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                <option value="general">General Feedback</option>
+                                <option value="website">Website Experience</option>
+                                <option value="content">Content Suggestions</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="bug">Bug Report</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="rating" class="block mb-2 text-sm font-medium text-gray-300">Your Rating</label>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex text-yellow-400 text-2xl">
+                                    <i class="far fa-star rating-star cursor-pointer hover:text-yellow-300" data-rating="1"></i>
+                                    <i class="far fa-star rating-star cursor-pointer hover:text-yellow-300" data-rating="2"></i>
+                                    <i class="far fa-star rating-star cursor-pointer hover:text-yellow-300" data-rating="3"></i>
+                                    <i class="far fa-star rating-star cursor-pointer hover:text-yellow-300" data-rating="4"></i>
+                                    <i class="far fa-star rating-star cursor-pointer hover:text-yellow-300" data-rating="5"></i>
+                                </div>
+                                <span class="text-gray-300 ml-2" id="ratingText">Select a rating</span>
+                                <input type="hidden" id="ratingValue" name="rating" value="0">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Your Message</label>
+                            <textarea id="message" rows="6" class="form-input bg-slate-700 border border-slate-600 rounded-lg block w-full p-3 text-white focus:ring-indigo-500 focus:border-indigo-500 transition-colors" required></textarea>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-500 rounded focus:ring-indigo-500 border-slate-600 bg-slate-700">
+                                <span class="ml-2 text-gray-300">Subscribe to our newsletter</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full transition-all duration-300 transform hover:scale-[1.02]">Submit Feedback</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section class="py-16 bg-slate-950" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center text-white">Frequently Asked <span class="text-indigo-400">Questions</span></h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-slate-800 rounded-xl shadow-lg mb-6 animate-on-scroll">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left">
+                        <span class="text-lg font-semibold">How long will it take to get a response to my feedback?</span>
+                        <i class="fas fa-chevron-down text-indigo-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden p-6 pt-0 text-gray-300">
+                        <p>We aim to respond to all feedback within 48 hours. For more complex issues or suggestions, it may take a bit longer as we carefully review and consider your input.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800 rounded-xl shadow-lg mb-6 animate-on-scroll">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left">
+                        <span class="text-lg font-semibold">Can I submit anonymous feedback?</span>
+                        <i class="fas fa-chevron-down text-indigo-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden p-6 pt-0 text-gray-300">
+                        <p>Yes, you can submit anonymous feedback if you prefer. Simply leave the name and email fields blank. However, if you'd like us to follow up with you, we'll need your contact information.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800 rounded-xl shadow-lg mb-6 animate-on-scroll">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left">
+                        <span class="text-lg font-semibold">How is my feedback used?</span>
+                        <i class="fas fa-chevron-down text-indigo-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden p-6 pt-0 text-gray-300">
+                        <p>Your feedback is extremely valuable to us. We use it to improve our website, content, and services. Our team reviews all submissions to identify common themes, prioritize new features, and address any issues. Feedback helps us make SneakerHead better for the entire community.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800 rounded-xl shadow-lg mb-6 animate-on-scroll">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left">
+                        <span class="text-lg font-semibold">Can I suggest new sneakers or brands to feature?</span>
+                        <i class="fas fa-chevron-down text-indigo-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden p-6 pt-0 text-gray-300">
+                        <p>Absolutely! We welcome suggestions for new sneakers, brands, or collections to feature on SneakerHead. You can use the feedback form and select "Content Suggestions" from the category dropdown. Our content team reviews these suggestions regularly.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800 rounded-xl shadow-lg mb-6 animate-on-scroll">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left">
+                        <span class="text-lg font-semibold">Do you have a rewards program for frequent feedback contributors?</span>
+                        <i class="fas fa-chevron-down text-indigo-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden p-6 pt-0 text-gray-300">
+                        <p>Not yet, but we're working on a community recognition program! We value our engaged community members and are exploring ways to reward those who regularly contribute high-quality feedback. Stay tuned for announcements coming soon.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-slate-900" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center text-white">Community <span class="text-indigo-400">Voices</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <div class="flex items-center mb-4">
+                        <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center text-xl font-bold">JD</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Jordan Davis</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">"I suggested adding more Jordan retro content and the team implemented it within a week! Love how responsive SneakerHead is to community feedback."</p>
+                </div>
+                
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <div class="flex items-center mb-4">
+                        <div class="h-12 w-12 rounded-full bg-purple-600 flex items-center justify-center text-xl font-bold">AL</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Amelia Liu</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star-half-alt text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">"I reported a bug with the mobile navigation and received a response within hours. Great customer service and the issue was fixed promptly."</p>
+                </div>
+                
+                <div class="bg-slate-800 p-6 rounded-xl shadow-lg animate-on-scroll">
+                    <div class="flex items-center mb-4">
+                        <div class="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">MT</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold">Marcus Thompson</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                                <i class="fas fa-star text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-300">"Suggested adding a section for limited edition collabs and not only did they add it, they credited me in their newsletter! This community rocks."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Info Section -->
+    <section class="py-16 bg-slate-950" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6 text-white">Still Have <span class="text-indigo-400">Questions?</span></h2>
+                <p class="text-gray-300 text-lg mb-8">If you prefer to reach out directly or have specific inquiries, here are alternative ways to contact us:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="animate-on-scroll">
+                        <div class="bg-slate-800 p-6 rounded-xl shadow-lg h-full">
+                            <i class="fas fa-envelope text-4xl text-indigo-400 mb-4"></i>
+                            <h3 class="font-semibold text-lg mb-2">Email Us</h3>
+                            <p class="text-gray-300">contact@sneakerhead.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-on-scroll">
+                        <div class="bg-slate-800 p-6 rounded-xl shadow-lg h-full">
+                            <i class="fas fa-comments text-4xl text-indigo-400 mb-4"></i>
+                            <h3 class="font-semibold text-lg mb-2">Live Chat</h3>
+                            <p class="text-gray-300">Available Mon-Fri<br>9am - 5pm EST</p>
+                        </div>
+                    </div>
+                    
+                    <div class="animate-on-scroll">
+                        <div class="bg-slate-800 p-6 rounded-xl shadow-lg h-full">
+                            <i class="fas fa-hashtag text-4xl text-indigo-400 mb-4"></i>
+                            <h3 class="font-semibold text-lg mb-2">Social Media</h3>
+                            <div class="flex justify-center space-x-4 text-gray-300">
+                                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fab fa-tiktok"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-slate-900" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-gradient-sneaker p-8 rounded-xl shadow-lg text-center animate-on-scroll">
+                    <h2 class="text-3xl font-bold mb-4 text-white">Join Our Newsletter</h2>
+                    <p class="text-white opacity-90 mb-6">Get the latest sneaker news, releases, and exclusive content delivered straight to your inbox.</p>
+                    
+                    <form class="flex flex-col md:flex-row gap-4">
+                        <input type="email" placeholder="Your email address" class="flex-grow p-3 rounded-lg text-gray-800 focus:ring-indigo-500 focus:border-indigo-500">
+                        <button type="submit" class="bg-white text-indigo-600 font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300">Subscribe</button>
+                    </form>
+                    
+                    <p class="text-sm text-white opacity-80 mt-4">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white py-12" data-scroll-section>
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">SneakerHead</h3>
+                    <p class="text-gray-400 mb-4">Your ultimate destination for sneaker culture, history, and news.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-indigo-400 transition-colors">Home</a></li>
+                        <li><a href="companies.html" class="text-gray-400 hover:text-indigo-400 transition-colors">Companies</a></li>
+                        <li><a href="top_sneakers.html" class="text-gray-400 hover:text-indigo-400 transition-colors">Top Sneakers</a></li>
+                        <li><a href="about_us.html" class="text-gray-400 hover:text-indigo-400 transition-colors">About Us</a></li>
+                        <li><a href="feedback.html" class="text-gray-400 hover:text-indigo-400 transition-colors">Feedback</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Sneaker Care</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Size Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Authenticity Tips</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Release Calendar</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">© 2025 SneakerHead. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.innerHTML = mobileMenu.classList.contains('hidden') 
+                ? '<i class="fas fa-bars text-2xl"></i>' 
+                : '<i class="fas fa-times text-2xl"></i>';
+        });
+        
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2');
+                navbar.classList.add('bg-opacity-90');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('py-2');
+                navbar.classList.remove('bg-opacity-90');
+                navbar.classList.add('py-4');
+            }
+        });
+        
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                // Toggle the answer visibility
+                answer.classList.toggle('hidden');
+                
+                // Rotate the icon
+                if (answer.classList.contains('hidden')) {
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+        
+        // Star Rating System
+        const ratingStars = document.querySelectorAll('.rating-star');
+        const ratingText = document.getElementById('ratingText');
+        const ratingValue = document.getElementById('ratingValue');
+        
+        ratingStars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                ratingValue.value = rating;
+                
+                // Update stars
+                ratingStars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+                
+                // Update text
+                const ratingMessages = [
+                    'Select a rating',
+                    'Poor',
+                    'Fair',
+                    'Good',
+                    'Very Good',
+                    'Excellent'
+                ];
+                
+                ratingText.textContent = ratingMessages[rating];
+            });
+            
+            // Hover effect
+            star.addEventListener('mouseenter', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                
+                ratingStars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('text-yellow-300');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseleave', () => {
+                ratingStars.forEach(s => {
+                    s.classList.remove('text-yellow-300');
+                });
+            });
+        });
+        
+        // Custom Cursor
+        const customCursor = document.querySelector('.custom-cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth >= 1024) { // Only on large screens
+                customCursor.style.left = `${e.clientX}px`;
+                customCursor.style.top = `${e.clientY}px`;
+                
+                if (customCursor.classList.contains('hidden')) {
+                    customCursor.classList.remove('hidden');
+                }
+            }
+        });
+        
+        // Hide cursor when leaving window
+        document.addEventListener('mouseout', () => {
+            customCursor.classList.add('hidden');
+        });
+        
+       
+        
+        // Initialize Locomotive Scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const scroll = new LocomotiveScroll({
+                el: document.querySelector('[data-scroll-container]'),
+                smooth: true,
+                smartphone: {
+                    smooth: false
+                },
+                tablet: {
+                    smooth: false
+                }
+            });
+            
+            // Initialize GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animation for elements with .animate-on-scroll class
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            animatedElements.forEach(element => {
+                gsap.from(element, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: element,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+            
+            // Update ScrollTrigger when locomotive scroll updates
+            scroll.on('scroll', ScrollTrigger.update);
+            
+            // Add locomotive scroll to ScrollTrigger
+            ScrollTrigger.scrollerProxy('[data-scroll-container]', {
+                scrollTop(value) {
+                    return arguments.length 
+                        ? scroll.scrollTo(value, 0, 0) 
+                        : scroll.scroll.instance.scroll.y;
+                },
+                getBoundingClientRect() {
+                    return {
+                        top: 0,
+                        left: 0,
+                        width: window.innerWidth,
+                        height: window.innerHeight
+                    };
+                }
+            });
+            
+            // Remove the scroll-indicator after scrolling
+            scroll.on('scroll', () => {
+                const scrollIndicator = document.querySelector('.scroll-indicator');
+                if (scrollIndicator && scroll.scroll.instance.scroll.y > 100) {
+                    scrollIndicator.style.opacity = '0';
+                    setTimeout(() => {
+                        scrollIndicator.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Form submission handling
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    // Simple validation
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const message = document.getElementById('message').value;
+                    
+                    if (!name || !email || !message) {
+                        alert('Please fill in all required fields.');
+                        return;
+                    }
+                    
+                    // Simulate form submission
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    
+                    submitButton.textContent = 'Submitting...';
+                    submitButton.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        // Reset form
+                        form.reset();
+                        
+                        // Reset star rating
+                        ratingStars.forEach(s => {
+                            s.classList.remove('fas');
+                            s.classList.add('far');
+                        });
+                        ratingText.textContent = 'Select a rating';
+                        ratingValue.value = 0;
+                        
+                        // Show success message
+                        alert('Thank you for your feedback! We appreciate your input.');
+                        
+                        // Reset button
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                    }, 1500);
+                });
+            }
+            
+            // Handle newsletter form
+            const newsletterForm = document.querySelector('section:nth-of-type(5) form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const emailInput = newsletterForm.querySelector('input[type="email"]');
+                    if (!emailInput.value) {
+                        alert('Please enter a valid email address.');
+                        return;
+                    }
+                    
+                    // Simulate subscription
+                    const submitButton = newsletterForm.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    
+                    submitButton.textContent = 'Subscribing...';
+                    submitButton.disabled = true;
+                    
+                    setTimeout(() => {
+                        // Reset form
+                        newsletterForm.reset();
+                        
+                        // Show success message
+                        alert('Thanks for subscribing! You\'ll receive our next newsletter soon.');
+                        
+                        // Reset button
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
