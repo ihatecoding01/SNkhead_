@@ -103,6 +103,56 @@
             width: 300px;
             height: 400px;
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3.5rem; /* Adjust hero title size for smaller screens */
+            }
+            .hero-subtitle {
+                font-size: 1.1rem; /* Adjust hero subtitle size */
+            }
+            .swiper-slide {
+                width: 250px; /* Adjust swiper slide width */
+                height: 350px; /* Adjust swiper slide height */
+            }
+            .grid-cols-2.md\:grid-cols-5 { /* Target the specific grid */
+                grid-template-columns: repeat(3, minmax(0, 1fr)); /* Change to 3 columns on medium screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem; /* Further adjust hero title size for mobile */
+            }
+             .hero-subtitle {
+                font-size: 1rem; /* Further adjust hero subtitle size */
+            }
+            .grid-cols-2.md\:grid-cols-5 { /* Target the specific grid */
+                grid-template-columns: repeat(2, minmax(0, 1fr)); /* Change to 2 columns on small screens */
+            }
+             .grid-cols-2.md\:grid-cols-4 { /* Target the brands grid */
+                grid-template-columns: repeat(2, minmax(0, 1fr)); /* Change to 2 columns on small screens */
+            }
+            .testimonials-swiper .swiper-slide {
+                 /* Ensure testimonials stack on small screens if needed, though Swiper handles breakpoints */
+            }
+            footer .grid-cols-1.md\:grid-cols-4 {
+                 grid-template-columns: repeat(1, minmax(0, 1fr)); /* Stack footer columns */
+                 text-align: center;
+            }
+             footer .flex.space-x-4 {
+                 justify-content: center; /* Center social icons */
+             }
+             footer .flex.flex-col-reverse.md\:flex-row {
+                 flex-direction: column-reverse; /* Ensure copyright is below links */
+                 align-items: center;
+             }
+             footer .flex.space-x-4:last-child { /* Target policy links */
+                 justify-content: center;
+                 margin-top: 1rem;
+             }
+        }
     </style>
 </head>
 <body class="font-sans bg-slate-950 text-white transition-colors duration-300" data-scroll-container>

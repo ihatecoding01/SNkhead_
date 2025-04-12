@@ -141,6 +141,42 @@
         .counter-value {
             transition: all 0.5s ease;
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3.5rem; /* Adjust hero title size for smaller screens */
+            }
+            .hero-subtitle {
+                font-size: 1.1rem; /* Adjust hero subtitle size */
+            }
+            /* Timeline adjustments are already handled below 768px */
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem; /* Further adjust hero title size for mobile */
+            }
+             .hero-subtitle {
+                font-size: 1rem; /* Further adjust hero subtitle size */
+            }
+            footer .flex-wrap.justify-between > div { /* Target footer columns */
+                 width: 100%; /* Stack footer columns */
+                 text-align: center;
+                 margin-bottom: 2rem; /* Add space between stacked columns */
+            }
+             footer .flex.space-x-4 {
+                 justify-content: center; /* Center social icons */
+             }
+             footer .flex.flex-col.md\:flex-row { /* Target copyright/policy row */
+                 flex-direction: column-reverse; /* Ensure copyright is below links */
+                 align-items: center;
+             }
+             footer .flex.space-x-6 { /* Target policy links */
+                 justify-content: center;
+                 margin-top: 1rem;
+             }
+        }
     </style>
 </head>
 <body class="font-sans bg-slate-950 text-white transition-colors duration-300" data-scroll-container>
